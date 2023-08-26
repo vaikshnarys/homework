@@ -4,5 +4,6 @@ def geometric_prog(min,q,len_num):
         result = min * (q ** i)
         yield result
 generator = geometric_prog(1,2,10)
+
 for value in generator:
     print(value)

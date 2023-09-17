@@ -70,3 +70,36 @@ def update_users(user_id):
     cursor.execute(sql_create_base, (name, int(age), date_create, int(user_id)))
     conn.commit()
     return 'User update'
+@app.route("/users/<user_id>", methods=['DELETE'])
+def delete_users(user_id):
+    cursor = conn.cursor()
+    sql_create_base = f'delete from users where id = {user_id}'
+    cursor.execute(sql_create_base, (int(user_id)))
+    conn.commit()
+    return 'Delete user'
+
+
+@app.route("/alter_table", methods=['POST'])
+def alter_table():
+    cursor = conn.cursor()
+    sql_create_base = f'alter table post add column post_id SERIAL;'
+    cursor.execute(sql_create_base)
+    conn.commit()
+    return "Create column post_id"
+@app.route("/update_post", methods=['PUT'])
+def update_post_id():
+    user_id = request.form.get('user_id')
+    name = request.form.get('name')
+    cursor = conn.cursor()
+    sql_create_base = f"update post set name = '{name}', user_id = {user_id} where id = 1"
+    cursor.execute(sql_create_base)
+    conn.commit()
+    return 'Update post_id'
+
+@app.route("/alter_foreign_key", methods=['POST'])
+def alter_table_post_id():
+    cursor = conn.cursor()
+    sql_create_base = f'alter table post add foreign key (user_id) references users(id)'
+    cursor.execute(sql_create_base)
+    conn.commit()
+    return "Create constraint"

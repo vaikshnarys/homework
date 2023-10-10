@@ -15,6 +15,7 @@ class Orm(models.Model):
     title = models.CharField(max_length=255)
     content = models.TextField(blank = True)
     counter = models.PositiveIntegerField(default=0)
+    category = models.CharField(blank=True, null=True)
     time_crete = models.DateTimeField(auto_now_add=True)
     is_published = models.BooleanField(default=True)
 

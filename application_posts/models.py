@@ -24,7 +24,10 @@ class Orm(models.Model):
 
 
 
-
+class Comment(models.Model):
+    text = models.TextField(blank=True)
+    new = models.ForeignKey('Post', on_delete = models.CASCADE, related_name = 'comments')
+    status = models.BooleanField(default=True)
 
 
 

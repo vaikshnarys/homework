@@ -3,7 +3,7 @@ import json
 from django.http import HttpResponse, JsonResponse, HttpResponseNotFound
 from django.shortcuts import render,redirect
 menu = ['About','Add post','Return','Input']
-from application_posts.models import Orm, Post
+from application_posts.models import Orm, Post , Comment
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
 def index(request):
@@ -72,17 +72,6 @@ def get_all_posts(request):
         result.append({'id': post.id, 'title': post.title, 'content' : post.content, 'counter' : post.counter})
     return JsonResponse(result, safe= False)
 
-def get_user(request, user_id=None):
-    if request.method == 'GET':
-        if user_id is not None:
-            user = get_object_or_404(User, id=user_id)
-            data = {'username': user.username, 'age': user.age}
-        else:
-            users = User.objects.all()
-            data = [{'id': user.id, 'username': user.username, 'age': user.age} for user in users]
-        return JsonResponse(data, safe=False)
-    else:
-        return JsonResponse({'message': 'Invalid data'}, status=400)
 def check_is_exists(request,counter):
     result = Orm.objects.filter(counter=counter).exists()
     return JsonResponse({'is_exists:': result})
@@ -96,12 +85,37 @@ def update_orm_post_or_create(request,_id):
     title = data.get('title','')
     content = data.get('content','')
     counter = data.get('counter','')
+    category = data.get('category', '')
     # title = request.POST.get('title')
     # content = request.POST.get('content')
     # counter = request.POST.get('counter')
-    post, is_updated = Orm.objects.update_or_create(title = title,content = content,counter = counter, defaults={'id' : _id},)
-    return JsonResponse({'id':post.id,'title' : post.title,'content' : post.content,'counter' : post.counter})
+    post, is_updated = Orm.objects.update_or_create(title = title,content = content,counter = counter,category = category, defaults={'id' : _id},)
+    return JsonResponse({'id':post.id,'title' : post.title,'content' : post.content,'counter' : post.counter,'category' : post.category})
 
 def delete_orm_post(request,_id):
     delete_post = Orm.objects.filter(id = _id).delete()
     return JsonResponse({'delete post': _id})
+@csrf_exempt
+def create_comment(request):
+    title = request.POST.get('title', '')
+    content = request.POST.get('content', '')
+    post = Post(title = title,content = content)
+    post.save()
+
+    comment_1 = Comment(text = 'First comment', new = post)
+    comment_2 = Comment(text = 'Second comment', new = post)
+    Comment.objects.bulk_create([comment_1,comment_2])
+    return HttpResponse(f"title: {post.title} , content : {post.content} , comment_1 : {comment_1.text} , comment_2: {comment_2.text}")
+
+
+def get_comments(request,post_id):
+    post = Post.objects.get(id=post_id)
+    comments = post.comments.all()
+    result = []
+    for comment in comments:
+        result.append({'id': comment.id, 'text' : comment.text})
+    return JsonResponse(result, safe= False)
+
+def change_status_all_new(request,post_id,status):
+    comment = Comment.objects.filter(new_id = post_id).update(status = status)
+    return JsonResponse(comment, safe=False)

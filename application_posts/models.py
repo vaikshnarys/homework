@@ -30,6 +30,12 @@ class Comment(models.Model):
     status = models.BooleanField(default=True)
 
 
+class Wallet(models.Model):
+    privat_wallet = models.PositiveIntegerField(default=0)
+    business_wallet = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return self.title
 
 
 

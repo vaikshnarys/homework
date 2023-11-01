@@ -1,0 +1,17 @@
+{% extends 'wallets/base.html' %}
+
+{% block content %}
+    <h1>Create wallet</h1>
+    <form action="/wallets/ " method="post" enctype="multipart/form-data">
+        <label>Name:</label>
+        <input type="text" name="name"/><br><br>
+        <label>Currency:</label>
+        <input type="text" name="currency"/><br><br>
+        <label>Balance:   </label>
+        <input type="text" name="balance"/><br><br>
+
+        <button type="submit">Send</button>
+
+    </form>
+
+{% endblock %}

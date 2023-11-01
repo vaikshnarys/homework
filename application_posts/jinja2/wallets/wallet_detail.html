@@ -1,0 +1,7 @@
+{% extends 'wallets/base.html' %}
+
+{% block content %}
+    <p>{{wallet.name}} with currency {{wallet.currency}} balance is {{wallet.balance}}</p>
+    <button onclick="window.location.href='/wallets/edit/form/{{ wallet.id }}/'">Edit</button>
+    <button onclick="window.location.href='/wallets/delete/{{ wallet.id }}/'">Delete</button>
+{% endblock %}

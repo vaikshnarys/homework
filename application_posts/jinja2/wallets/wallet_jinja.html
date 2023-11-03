@@ -1,0 +1,11 @@
+{% extends 'wallets/base.html' %}
+
+{% block content %}
+    {% for wallet in wallets %}
+        <p>{{wallet.name}} with currency {{wallet.currency}} balance is {{wallet.balance}}</p>
+        <li>
+            <a href = "/wallets/{{wallet.id}}/">{{wallet.name}} </a>
+        </li>
+    {% endfor %}
+        <button onclick="window.location.href='/wallets/form/'">Create new wallet</button>
+{% endblock %}

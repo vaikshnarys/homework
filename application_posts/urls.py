@@ -20,4 +20,8 @@ urlpatterns = [
     path('wallets/edit/<int:_id>/', EditWalletView.as_view(), name='wallet_edit'),
     path('wallets/edit/form/<int:_id>/', EditFormRender.as_view(), name='edit_wallet_form'),
     path('wallets/delete/<int:_id>', DeleteWallet.as_view(), name='wallet_delete'),
+
+    path('wallets_form/', Walletsformview.as_view(), name='wallets'),
+    path('wallets/addpage/', AddPageFormWallet.as_view(), name='addwallets'),
+
 ]
